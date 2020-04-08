@@ -2,35 +2,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AM PROJECT</title>
+    <title>sigmod</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./styles.css"/>
 </head>
 <body>
     <div class="container">
-        <h1>ASK PROJECT - Dan Chiarlone</h1>
-        <div class="row">
+        <h1 class="jumbotron">Signal Modulation! ~ Dan Chiarlone ッ</h1>
+        <h2>ASK</h2>
+        <div class="row hide-on-mobile">
             <div class="col-md-6">
-                <h2>Interactive canvas</h2>
+                <h3>Interactive canvas</h3>
                 <canvas></canvas>
                 <button class="btn btn-info" id="get-fft">GET FFT</button>
                 <button class="btn btn-info" onclick="location.reload()">GET NEW BIT SEQUENCE</button>
             </div>
         </div>
         <div class="row">
-            <h2>Matlab Graphs</h2>
+            <h3>Matlab Graphs</h3>
             <div class="col-md-6">
                 <img height="50%" src="time.jpg" alt="time">
             </div>
             <div class="col-md-6">
                 <img height="50%" src="freq.jpg" alt="freq">
             </div>
-            <h2>Matlab Code</h2>
+            <h3>Matlab Code</h3>
             <pre>
                 <code>
                     close all;
                     clear;
                     clc;
+                    
+                    %  bit sequence 
                     
                     K = 40;
                     data_rate = 20;
@@ -43,6 +46,10 @@
                         end
                     end
                     
+                    %  /bit sequence 
+                    
+                    %  carrier 
+                    
                     fc = 315;
                     N = 800;
                     OSR = 4;
@@ -52,6 +59,12 @@
                     
                     carrier = cos(2*pi*fc*n*Ts);
                     
+                    %  /carrier 
+                    
+                    %  x(t) 
+                    
+                    %  time 
+                    
                     x = b_k.*carrier;
                     
                     figure(1);
@@ -59,6 +72,10 @@
                     title('ASK in time domain');
                     ylabel('magnitude');
                     xlabel('time');
+                    
+                    %  /time 
+                    
+                    %  frequency 
                     
                     k = n; % frequency index;
                     
@@ -75,10 +92,98 @@
                     plot(f_shift, abs(X)/N);
                     title('ASK in frequency domain');
                     ylabel("magnitude");
-                    xlabel("frequency");                
+                    xlabel("frequency");
+                    
+                    %  /frequency 
+                    
+                    %  /x(t)          
                 </code>
             </pre>
         </div>
+        <h2>PSK</h2>
+        <div class="row">
+            <h3>Matlab Graphs</h3>
+            <div class="col-md-6">
+                <img height="50%" src="time_psk.jpg" alt="time">
+            </div>
+            <div class="col-md-6">
+                <img height="50%" src="freq_psk.jpg" alt="freq">
+            </div>
+            <h3>Matlab Code</h3>
+            <pre>
+                <code>
+                    %  x(t) 
+
+                    %  time 
+                    
+                    x_psk = cos(2*pi*fc*n*Ts + pi.*b_k);
+                    
+                    figure(3);
+                    plot(x_psk);
+                    title('PSK in time domain');
+                    ylabel('magnitude');
+                    xlabel('time');
+                    
+                    %  /time 
+                    
+                    %  frequency 
+                    
+                    X_PSK = fftshift(fft(x_psk));
+                    figure(4);
+                    plot(f_shift, abs(X_PSK)/N);
+                    title('PSK in frequency domain');
+                    ylabel("magnitude");
+                    xlabel("frequency");
+                    
+                    %  /frequency 
+                    
+                    %  /x(t) 
+                </code>
+            </pre>
+        </div>
+        <h2>FSK</h2>
+        <div class="row">
+            <h3>Matlab Graphs</h3>
+            <div class="col-md-6">
+                <img height="50%" src="time_fsk.jpg" alt="time">
+            </div>
+            <div class="col-md-6">
+                <img height="50%" src="freq_fsk.jpg" alt="freq">
+            </div>
+            <h3>Matlab Code</h3>
+            <pre>
+                <code>
+                    %  x(t) 
+
+                    %  time 
+                    
+                    Deltaf = 25;
+                    
+                    x_fsk = cos(2*pi*n*Ts.*(fc+Deltaf*b_k));
+                    
+                    figure(5);
+                    plot(x_fsk);
+                    title('FSK in time domain');
+                    ylabel('magnitude');
+                    xlabel('time');
+                    
+                    %  /time 
+                    
+                    %  frequency 
+                    
+                    X_FSK = fftshift(fft(x_fsk));
+                    figure(6);
+                    plot(f_shift, abs(X_FSK)/N);
+                    title('FSK in frequency domain');
+                    ylabel("magnitude");
+                    xlabel("frequency");
+                    
+                    %  /frequency 
+                    
+                    %  /x(t)
+                </code>
+            </pre>
+        </div>        
     </div>    
     <script src="./index.js"></script>
 </body>
