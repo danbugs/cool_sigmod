@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AM PROJECT</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles.css"/>
+</head>
+<body>
+    <div class="container">
+        <h1>ASK PROJECT - Dan Chiarlone</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Interactive canvas</h2>
+                <canvas></canvas>
+                <button class="btn btn-info" id="get-fft">GET FFT</button>
+                <button class="btn btn-info" onclick="location.reload()">GET NEW BIT SEQUENCE</button>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Matlab Graphs</h2>
+            <div class="col-md-6">
+                <img height="50%" src="time.jpg" alt="time">
+            </div>
+            <div class="col-md-6">
+                <img height="50%" src="freq.jpg" alt="freq">
+            </div>
+            <h2>Matlab Code</h2>
+            <pre>
+                <code>
+                    close all;
+                    clear;
+                    clc;
+                    
+                    K = 40;
+                    data_rate = 20;
+                    b_k = zeros(1, K*data_rate);
+                    
+                    for i = 0:(K-1)
+                        curr = round(rand());
+                        for j = 1:data_rate
+                            b_k(data_rate*i+j) = curr;
+                        end
+                    end
+                    
+                    fc = 315;
+                    N = 800;
+                    OSR = 4;
+                    fs = OSR*fc;
+                    Ts = 1/fs;
+                    n = 0:(N-1);
+                    
+                    carrier = cos(2*pi*fc*n*Ts);
+                    
+                    x = b_k.*carrier;
+                    
+                    figure(1);
+                    plot(x);
+                    title('ASK in time domain');
+                    ylabel('magnitude');
+                    xlabel('time');
+                    
+                    k = n; % frequency index;
+                    
+                    deltaf = fs/N;
+                    
+                    if mod(N,2) == 0
+                        f_shift = (k-(N)/2)*deltaf; % k = N/2
+                    else 
+                        f_shift = (k-(N -1)/2)*deltaf; % k = (N-1)/2
+                    end 
+                    
+                    X = fftshift(fft(x));
+                    figure(2);
+                    plot(f_shift, abs(X)/N);
+                    title('ASK in frequency domain');
+                    ylabel("magnitude");
+                    xlabel("frequency");                
+                </code>
+            </pre>
+        </div>
+    </div>    
+    <script src="./index.js"></script>
+</body>
+</html>
